@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Mysql on BlueBo</title>
+    <link>https://madbluecat.github.io/tags/mysql/</link>
+    <description>Recent content in Mysql on BlueBo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>© bluebo</copyright>
+    <lastBuildDate>Wed, 17 Jan 2024 20:45:49 +0800</lastBuildDate>
+    <atom:link href="https://madbluecat.github.io/tags/mysql/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Mysqlbinlog (3)</title>
+      <link>https://madbluecat.github.io/post/mysqlbinlog3/</link>
+      <pubDate>Wed, 17 Jan 2024 20:45:49 +0800</pubDate>
+      <guid>https://madbluecat.github.io/post/mysqlbinlog3/</guid>
+      <description>&lt;h1 id=&#34;write_rows_event&#34;&gt;write_rows_event&lt;/h1&gt;&#xA;&lt;p&gt;每一次执行insert操作，都会产生一个write_rows_event事件。用于记录插入的数据。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Mysqlbinlog (2)</title>
+      <link>https://madbluecat.github.io/post/mysqlbinlog2/</link>
+      <pubDate>Wed, 17 Jan 2024 17:43:27 +0800</pubDate>
+      <guid>https://madbluecat.github.io/post/mysqlbinlog2/</guid>
+      <description>&lt;h1 id=&#34;table_map_event&#34;&gt;table_map_event&lt;/h1&gt;&#xA;&lt;p&gt;对于每次insert, update, delete操作，都会产生一个table_map_event，该event用于描述接下来event的数据所对应的表结构。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Mysqlbinlog (1)</title>
+      <link>https://madbluecat.github.io/post/mysqlbinlog1/</link>
+      <pubDate>Mon, 10 Apr 2023 21:43:05 +0800</pubDate>
+      <guid>https://madbluecat.github.io/post/mysqlbinlog1/</guid>
+      <description>&lt;h1 id=&#34;概述&#34;&gt;概述&lt;/h1&gt;&#xA;&lt;p&gt;mysql binlog物理存储格式详解。基于mysql 8.0.22&lt;/p&gt;&#xA;&lt;h2 id=&#34;magicnumber&#34;&gt;MagicNumber&lt;/h2&gt;&#xA;&lt;p&gt;每个binlog的开头是 4bytes magic number &lt;code&gt;0xfe 0x62 0x69 0x6e&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Mysql binlog data types</title>
+      <link>https://madbluecat.github.io/post/mysqldatatypes/</link>
+      <pubDate>Thu, 06 Apr 2023 16:15:02 +0800</pubDate>
+      <guid>https://madbluecat.github.io/post/mysqldatatypes/</guid>
+      <description>&lt;h1 id=&#34;概述&#34;&gt;概述&lt;/h1&gt;&#xA;&lt;p&gt;对mysql binlog中，各类字段存储格式描述&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

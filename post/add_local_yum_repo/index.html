@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html><head lang="en">
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>添加本地yum源 - BlueBo</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="离线服务器添加本地yum源" />
+	<meta property="og:image" content=""/>
+	<meta property="og:title" content="添加本地yum源" />
+<meta property="og:description" content="离线服务器添加本地yum源" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://madbluecat.github.io/post/add_local_yum_repo/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2024-03-20T17:49:40+08:00" />
+<meta property="article:modified_time" content="2024-03-20T17:49:40+08:00" />
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="添加本地yum源"/>
+<meta name="twitter:description" content="离线服务器添加本地yum源"/>
+<script src="https://madbluecat.github.io/js/feather.min.js"></script>
+	
+	
+        <link href="https://madbluecat.github.io/css/fonts.2c2227b81b1970a03e760aa2e6121cd01f87c88586803cbb282aa224720a765f.css" rel="stylesheet">
+	
+
+	
+	<link rel="stylesheet" type="text/css" media="screen" href="https://madbluecat.github.io/css/main.ac08a4c9714baa859217f92f051deb58df2938ec352b506df655005dcaf98cc0.css" />
+		<link id="darkModeStyle" rel="stylesheet" type="text/css" href="https://madbluecat.github.io/css/dark.726cd11ca6eb7c4f7d48eb420354f814e5c1b94281aaf8fd0511c1319f7f78a4.css" media="(prefers-color-scheme: dark)"  />
+	
+
+	
+	
+
+	
+	
+	
+	
+</head>
+<body>
+        <div class="content"><header>
+	<div class="main">
+		<a href="https://madbluecat.github.io/">BlueBo</a>
+	</div>
+	<nav>
+		
+		<a href="/">Home</a>
+		
+		<a href="/post">All posts</a>
+		
+		<a href="/about">About</a>
+		
+		<a href="/tags">Tags</a>
+		
+		
+	</nav>
+</header>
+
+<main>
+	<article>
+		<div class="title">
+			<h1 class="title">添加本地yum源</h1>
+			<div class="meta">Posted on Mar 20, 2024</div>
+		</div>
+		
+
+		<section class="body">
+			<h2 id="本地yum源搭建">本地yum源搭建</h2>
+<p>由于离线环境无法yum install，但是可以在另一台可以访问外网的相同内核的机器中下载好依赖相关的rpm，在上传到离线环境中的本地yum源，
+然后离线环境就可以直接yum install了。</p>
+<h3 id="可访问外网机器执行以下命令可以下载相关依赖包">可访问外网机器执行以下命令可以下载相关依赖包</h3>
+<p>首先下载 yum-utils 软件包（含 yumdownloader 和 repotrack 等命令）</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>yum -y install yum-utils  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>repotrack --download_path<span style="color:#f92672">=[</span>下载路径<span style="color:#f92672">]</span>  <span style="color:#f92672">[</span>软件包名称<span style="color:#f92672">]</span>
+</span></span></code></pre></div><p>如安装tree 命令</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>repotrack --download_path<span style="color:#f92672">=</span>./rpmpkgs tree
+</span></span></code></pre></div><p>然后会将相关依赖包下载到指定目录,打包上传到离线环境中的本地yum源</p>
+<h3 id="离线环境配置本地yum源">离线环境配置本地yum源</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>配置本地yum仓库信息
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># vim /etc/yum.repos.d/my-yum.repo</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>my-yum<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>name<span style="color:#f92672">=</span>my-yum local repository
+</span></span><span style="display:flex;"><span>baseurl<span style="color:#f92672">=</span>file:///home/my-yum
+</span></span><span style="display:flex;"><span>gpgcheck<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>enabled<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
+</span></span></code></pre></div><p>可以看到.repo配置文件，也是如此简单：</p>
+<p>my-yum是本地仓库名，可任意起名，但是注意不能与已有的仓库名重复。
+name后面是注释信息，随意书写。
+baseurl这后面就是填写本地仓库路径了，file://表示使用本地文件协议，后面的/home/my-yum本地rpm包存放路径。
+gpgcheck=0这是和验证包的安全信息的，最好设置成0，表示关闭安全验证，否则还需要准备安全验证文件，麻烦一堆一堆的。
+enabled=0，表示启用本仓库，1启用，0关闭。</p>
+<h3 id="生成repodata信息">生成repodata信息</h3>
+<p>配置好本地yum仓库信息后，需要生成repodata信息，执行以下命令</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>createrepo /home/my-yum
+</span></span></code></pre></div><h3 id="测试">测试</h3>
+<p>直接在离线环境中</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>yum install tree
+</span></span></code></pre></div><h3 id="对本地yum仓库更新">对本地yum仓库更新</h3>
+<p>当本地yum仓库中rpm包有更新时，需要更新本地yum仓库，执行以下命令</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>createrepo --update /home/my-yum
+</span></span></code></pre></div>
+		</section>
+
+		<div class="post-tags">
+			
+			
+			<nav class="nav tags">
+				<ul class="tags">
+					
+					<li><a href="/tags/yum">yum</a></li>
+					
+					<li><a href="/tags/local">local</a></li>
+					
+				</ul>
+			</nav>
+			
+			
+		</div>
+		</article>
+</main>
+<footer>
+  <div style="display:flex"><a class="soc" href="https://github.com" rel="me" title="GitHub"><i data-feather="github"></i></a>
+    <a class="border"></a><a class="soc" href="https://twitter.com" rel="me" title="Twitter"><i data-feather="twitter"></i></a>
+    <a class="border"></a><a class="soc" href="https://gitlab.com" rel="me" title="GitLab"><i data-feather="gitlab"></i></a>
+    <a class="border"></a></div>
+  <div class="footer-info">
+    2024  © bluebo |  <a
+      href="https://github.com/athul/archie">Archie Theme</a> | Built with <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
+
+
+<script>
+  feather.replace()
+</script></div>
+    </body>
+</html>

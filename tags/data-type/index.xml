@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Data Type on BlueBo</title>
+    <link>https://madbluecat.github.io/tags/data-type/</link>
+    <description>Recent content in Data Type on BlueBo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>© bluebo</copyright>
+    <lastBuildDate>Thu, 06 Apr 2023 16:15:02 +0800</lastBuildDate>
+    <atom:link href="https://madbluecat.github.io/tags/data-type/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Mysql binlog data types</title>
+      <link>https://madbluecat.github.io/post/mysqldatatypes/</link>
+      <pubDate>Thu, 06 Apr 2023 16:15:02 +0800</pubDate>
+      <guid>https://madbluecat.github.io/post/mysqldatatypes/</guid>
+      <description>&lt;h1 id=&#34;概述&#34;&gt;概述&lt;/h1&gt;&#xA;&lt;p&gt;对mysql binlog中，各类字段存储格式描述&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

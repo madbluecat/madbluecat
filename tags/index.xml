@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on BlueBo</title>
+    <link>https://madbluecat.github.io/tags/</link>
+    <description>Recent content in Tags on BlueBo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>© bluebo</copyright>
+    <lastBuildDate>Tue, 09 Apr 2024 11:43:54 +0800</lastBuildDate>
+    <atom:link href="https://madbluecat.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Index</title>
+      <link>https://madbluecat.github.io/tags/index/</link>
+      <pubDate>Tue, 09 Apr 2024 11:43:54 +0800</pubDate>
+      <guid>https://madbluecat.github.io/tags/index/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Tmux</title>
+      <link>https://madbluecat.github.io/tags/tmux/</link>
+      <pubDate>Tue, 09 Apr 2024 11:29:54 +0800</pubDate>
+      <guid>https://madbluecat.github.io/tags/tmux/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Libibverbs</title>
+      <link>https://madbluecat.github.io/tags/libibverbs/</link>
+      <pubDate>Wed, 27 Mar 2024 10:19:40 +0800</pubDate>
+      <guid>https://madbluecat.github.io/tags/libibverbs/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Rdma</title>
+      <link>https://madbluecat.github.io/tags/rdma/</link>
+      <pubDate>Wed, 27 Mar 2024 10:19:40 +0800</pubDate>
+      <guid>https://madbluecat.github.io/tags/rdma/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Local</title>
+      <link>https://madbluecat.github.io/tags/local/</link>
+      <pubDate>Wed, 20 Mar 2024 17:49:40 +0800</pubDate>
+      <guid>https://madbluecat.github.io/tags/local/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Yum</title>
+      <link>https://madbluecat.github.io/tags/yum/</link>
+      <pubDate>Wed, 20 Mar 2024 17:49:40 +0800</pubDate>
+      <guid>https://madbluecat.github.io/tags/yum/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Binlog</title>
+      <link>https://madbluecat.github.io/tags/binlog/</link>
+      <pubDate>Wed, 17 Jan 2024 20:45:49 +0800</pubDate>
+      <guid>https://madbluecat.github.io/tags/binlog/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Event</title>
+      <link>https://madbluecat.github.io/tags/event/</link>
+      <pubDate>Wed, 17 Jan 2024 20:45:49 +0800</pubDate>
+      <guid>https://madbluecat.github.io/tags/event/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Mysql</title>
+      <link>https://madbluecat.github.io/tags/mysql/</link>
+      <pubDate>Wed, 17 Jan 2024 20:45:49 +0800</pubDate>
+      <guid>https://madbluecat.github.io/tags/mysql/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Write Rows</title>
+      <link>https://madbluecat.github.io/tags/write-rows/</link>
+      <pubDate>Wed, 17 Jan 2024 20:45:49 +0800</pubDate>
+      <guid>https://madbluecat.github.io/tags/write-rows/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Table Map</title>
+      <link>https://madbluecat.github.io/tags/table-map/</link>
+      <pubDate>Wed, 17 Jan 2024 17:43:27 +0800</pubDate>
+      <guid>https://madbluecat.github.io/tags/table-map/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Data Type</title>
+      <link>https://madbluecat.github.io/tags/data-type/</link>
+      <pubDate>Thu, 06 Apr 2023 16:15:02 +0800</pubDate>
+      <guid>https://madbluecat.github.io/tags/data-type/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Golang</title>
+      <link>https://madbluecat.github.io/tags/golang/</link>
+      <pubDate>Fri, 24 Jun 2022 00:00:00 +0000</pubDate>
+      <guid>https://madbluecat.github.io/tags/golang/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Source</title>
+      <link>https://madbluecat.github.io/tags/source/</link>
+      <pubDate>Fri, 24 Jun 2022 00:00:00 +0000</pubDate>
+      <guid>https://madbluecat.github.io/tags/source/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Music</title>
+      <link>https://madbluecat.github.io/tags/music/</link>
+      <pubDate>Tue, 10 May 2022 17:46:28 +0800</pubDate>
+      <guid>https://madbluecat.github.io/tags/music/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Markdown</title>
+      <link>https://madbluecat.github.io/tags/markdown/</link>
+      <pubDate>Sat, 09 Mar 2019 00:00:00 +0000</pubDate>
+      <guid>https://madbluecat.github.io/tags/markdown/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Text</title>
+      <link>https://madbluecat.github.io/tags/text/</link>
+      <pubDate>Sat, 09 Mar 2019 00:00:00 +0000</pubDate>
+      <guid>https://madbluecat.github.io/tags/text/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>

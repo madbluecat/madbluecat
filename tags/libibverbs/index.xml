@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Libibverbs on BlueBo</title>
+    <link>https://madbluecat.github.io/tags/libibverbs/</link>
+    <description>Recent content in Libibverbs on BlueBo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>© bluebo</copyright>
+    <lastBuildDate>Wed, 27 Mar 2024 10:19:40 +0800</lastBuildDate>
+    <atom:link href="https://madbluecat.github.io/tags/libibverbs/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>ibv_destroy_cq</title>
+      <link>https://madbluecat.github.io/post/ibv_destroy_cq/</link>
+      <pubDate>Wed, 27 Mar 2024 10:19:40 +0800</pubDate>
+      <guid>https://madbluecat.github.io/post/ibv_destroy_cq/</guid>
+      <description>ibv_destroy_cq() 5.00 avg. rating (97% score) - 1 vote&#xA;int ibv_destroy_cq(struct ibv_cq *cq); Description ibv_destroy_cq() destroys a Completion Queue.&#xA;The destruction of a CQ will fail if any QP is still associated with it.&#xA;If there is any affiliated asynchronous event on that CQ that was read, using ibv_get_async_event(), but still wasn&amp;rsquo;t acknowledged, using ibv_ack_async_event(), calling to ibv_destroy_cq() will never end until that event will be acknowledged.&#xA;A CQ can be destroyed either if it is empty or contains Work Completions that still weren&amp;rsquo;t polled by ibv_poll_cq().</description>
+    </item>
+    <item>
+      <title>Qp_state_machine</title>
+      <link>https://madbluecat.github.io/post/qp_state_machine/</link>
+      <pubDate>Wed, 27 Mar 2024 10:19:40 +0800</pubDate>
+      <guid>https://madbluecat.github.io/post/qp_state_machine/</guid>
+      <description>copy from RDMAmojo&#xA;// RDMAmojo – blog on RDMA technology and programming by Dotan Barak&#xA;QP state machine Contents&#xA;4.43 avg. rating (89% score) - 14 votes&#xA;Since a QP is one of the important objects in of RDMA, I will handle it in the next few posts.&#xA;QP State transitions In a QP lifetime, the possible states can be:&#xA;Reset Initialize (Init) Ready To Receive (RTR) Ready To Send (RTS) Send Queue Drained (SQD) Send Queue Error (SQE) Error A QP can be transitioned from one state to another state by two possible ways:</description>
+    </item>
+  </channel>
+</rss>

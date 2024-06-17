@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html><head lang="en">
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>ibv_destroy_cq - BlueBo</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="ibv_destroy_cq" />
+	<meta property="og:image" content=""/>
+	<meta property="og:title" content="ibv_destroy_cq" />
+<meta property="og:description" content="ibv_destroy_cq" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://madbluecat.github.io/post/ibv_destroy_cq/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2024-03-27T10:19:40+08:00" />
+<meta property="article:modified_time" content="2024-03-27T10:19:40+08:00" />
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="ibv_destroy_cq"/>
+<meta name="twitter:description" content="ibv_destroy_cq"/>
+<script src="https://madbluecat.github.io/js/feather.min.js"></script>
+	
+	
+        <link href="https://madbluecat.github.io/css/fonts.2c2227b81b1970a03e760aa2e6121cd01f87c88586803cbb282aa224720a765f.css" rel="stylesheet">
+	
+
+	
+	<link rel="stylesheet" type="text/css" media="screen" href="https://madbluecat.github.io/css/main.ac08a4c9714baa859217f92f051deb58df2938ec352b506df655005dcaf98cc0.css" />
+		<link id="darkModeStyle" rel="stylesheet" type="text/css" href="https://madbluecat.github.io/css/dark.726cd11ca6eb7c4f7d48eb420354f814e5c1b94281aaf8fd0511c1319f7f78a4.css" media="(prefers-color-scheme: dark)"  />
+	
+
+	
+	
+
+	
+	
+	
+	
+</head>
+<body>
+        <div class="content"><header>
+	<div class="main">
+		<a href="https://madbluecat.github.io/">BlueBo</a>
+	</div>
+	<nav>
+		
+		<a href="/">Home</a>
+		
+		<a href="/post">All posts</a>
+		
+		<a href="/about">About</a>
+		
+		<a href="/tags">Tags</a>
+		
+		
+	</nav>
+</header>
+
+<main>
+	<article>
+		<div class="title">
+			<h1 class="title">ibv_destroy_cq</h1>
+			<div class="meta">Posted on Mar 27, 2024</div>
+		</div>
+		
+
+		<section class="body">
+			<h1 id="ibv_destroy_cq">ibv_destroy_cq()</h1>
+<p><strong>5.00</strong> avg. rating (<strong>97</strong>% score) - <strong>1</strong> vote</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">ibv_destroy_cq</span>(<span style="color:#66d9ef">struct</span> ibv_cq <span style="color:#f92672">*</span>cq);
+</span></span></code></pre></div><h2 id="description">Description</h2>
+<p><strong>ibv_destroy_cq()</strong> destroys a Completion Queue.</p>
+<p>The destruction of a CQ will fail if any QP is still associated with it.</p>
+<p>If there is any affiliated asynchronous event on that CQ that was read, using <strong>ibv_get_async_event()</strong>, but still wasn&rsquo;t acknowledged, using <strong>ibv_ack_async_event()</strong>, calling to <strong>ibv_destroy_cq()</strong> will never end until that event will be acknowledged.</p>
+<p>A CQ can be destroyed either if it is empty or contains Work Completions that still weren&rsquo;t polled by <strong>ibv_poll_cq()</strong>. Also, it can be destroyed if a request for notification was requested using <strong>ibv_req_notify_cq()</strong> before any notification event was created.</p>
+<h2 id="parameters">Parameters</h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Direction</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cq</td>
+<td>in</td>
+<td>CQ that was returned from <strong>ibv_create_cq()</strong></td>
+</tr>
+</tbody>
+</table>
+<h2 id="return-values">Return Values</h2>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>On success</td>
+</tr>
+<tr>
+<td>errno</td>
+<td>On failure</td>
+</tr>
+<tr>
+<td>EBUSY</td>
+<td>One or more Work Queues is still associated with the CQ</td>
+</tr>
+</tbody>
+</table>
+<h2 id="examples">Examples</h2>
+<p>Create a CQ with 100 entries and destroy it:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> ibv_cq <span style="color:#f92672">*</span>cq;
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span>cq <span style="color:#f92672">=</span> <span style="color:#a6e22e">ibv_create_cq</span>(context, <span style="color:#ae81ff">100</span>, NULL, NULL, <span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>cq) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fprintf</span>(stderr, <span style="color:#e6db74">&#34;Error, ibv_create_cq() failed</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">ibv_destroy_cq</span>(cq)) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fprintf</span>(stderr, <span style="color:#e6db74">&#34;Error, ibv_destroy_cq() failed</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="faqs">FAQs</h2>
+<h4 id="ibv_destroy_cq-failed-what-will-happen-to-the-qps-which-are-associated-with-it">ibv_destroy_cq() failed, what will happen to the QPs which are associated with it?</h4>
+<p>Nothing at all. You can continue working with them without any side-effect.</p>
+<h4 id="ibv_destroy_cq-failed-can-i-know-which-qps-are-associated-with-it-and-caused-this-failure">ibv_destroy_cq() failed, can I know which QPs are associated with it and caused this failure?</h4>
+<p>No, currently the RDMA stack doesn’t have this capability.</p>
+<h4 id="can-i-destroy-a-cq-with-work-completion-in-it">Can I destroy a CQ with Work Completion in it?</h4>
+<p>Yes, you can. When a CQ is being destroyed, it doesn&rsquo;t matter if it contains Work Completions or not.</p>
+<h4 id="i-called-ibv_req_notify_cq-on-a-cq-and-didnt-get-any-completion-event-on-it-can-i-destroy-that-cq">I called ibv_req_notify_cq() on a CQ and didn&rsquo;t get any Completion event on it. Can I destroy that CQ?</h4>
+<p>Yes, you can.</p>
+<h4 id="i-called-ibv_destroy_cq-but-it-never-ended-what-happened">I called ibv_destroy_cq(), but it never ended. What happened?</h4>
+<p>There is at least one affiliated asynchronous event on that CQ that was read without a proper acknowledgement.</p>
+<h3 id="related"><em>Related</em></h3>
+<h2 id="comments">Comments</h2>
+<p>Tell us what do you think.</p>
+<h2 id="add-a-comment">Add a Comment</h2>
+<p>This comment will be moderated; answer may be provided within 14 days.</p>
+
+		</section>
+
+		<div class="post-tags">
+			
+			
+			<nav class="nav tags">
+				<ul class="tags">
+					
+					<li><a href="/tags/libibverbs">libibverbs</a></li>
+					
+					<li><a href="/tags/rdma">rdma</a></li>
+					
+				</ul>
+			</nav>
+			
+			
+		</div>
+		</article>
+</main>
+<footer>
+  <div style="display:flex"><a class="soc" href="https://github.com" rel="me" title="GitHub"><i data-feather="github"></i></a>
+    <a class="border"></a><a class="soc" href="https://twitter.com" rel="me" title="Twitter"><i data-feather="twitter"></i></a>
+    <a class="border"></a><a class="soc" href="https://gitlab.com" rel="me" title="GitLab"><i data-feather="gitlab"></i></a>
+    <a class="border"></a></div>
+  <div class="footer-info">
+    2024  © bluebo |  <a
+      href="https://github.com/athul/archie">Archie Theme</a> | Built with <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
+
+
+<script>
+  feather.replace()
+</script></div>
+    </body>
+</html>

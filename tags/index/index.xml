@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Index on BlueBo</title>
+    <link>https://madbluecat.github.io/tags/index/</link>
+    <description>Recent content in Index on BlueBo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>© bluebo</copyright>
+    <lastBuildDate>Tue, 09 Apr 2024 11:43:54 +0800</lastBuildDate>
+    <atom:link href="https://madbluecat.github.io/tags/index/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Posts</title>
+      <link>https://madbluecat.github.io/post/</link>
+      <pubDate>Tue, 09 Apr 2024 11:43:54 +0800</pubDate>
+      <guid>https://madbluecat.github.io/post/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Write Rows on BlueBo</title>
+    <link>https://madbluecat.github.io/tags/write-rows/</link>
+    <description>Recent content in Write Rows on BlueBo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>© bluebo</copyright>
+    <lastBuildDate>Wed, 17 Jan 2024 20:45:49 +0800</lastBuildDate>
+    <atom:link href="https://madbluecat.github.io/tags/write-rows/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Mysqlbinlog (3)</title>
+      <link>https://madbluecat.github.io/post/mysqlbinlog3/</link>
+      <pubDate>Wed, 17 Jan 2024 20:45:49 +0800</pubDate>
+      <guid>https://madbluecat.github.io/post/mysqlbinlog3/</guid>
+      <description>&lt;h1 id=&#34;write_rows_event&#34;&gt;write_rows_event&lt;/h1&gt;&#xA;&lt;p&gt;每一次执行insert操作，都会产生一个write_rows_event事件。用于记录插入的数据。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html><head lang="en">
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Go 源码学习 引导(二) - BlueBo</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="先附上runtime·rt0_go中检查及初始化的源码" />
+	<meta property="og:image" content=""/>
+	<meta property="og:title" content="Go 源码学习 引导(二)" />
+<meta property="og:description" content="先附上runtime·rt0_go中检查及初始化的源码" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://madbluecat.github.io/post/gosrclearn2/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2022-06-24T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-06-24T00:00:00+00:00" />
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Go 源码学习 引导(二)"/>
+<meta name="twitter:description" content="先附上runtime·rt0_go中检查及初始化的源码"/>
+<script src="https://madbluecat.github.io/js/feather.min.js"></script>
+	
+	
+        <link href="https://madbluecat.github.io/css/fonts.2c2227b81b1970a03e760aa2e6121cd01f87c88586803cbb282aa224720a765f.css" rel="stylesheet">
+	
+
+	
+	<link rel="stylesheet" type="text/css" media="screen" href="https://madbluecat.github.io/css/main.ac08a4c9714baa859217f92f051deb58df2938ec352b506df655005dcaf98cc0.css" />
+		<link id="darkModeStyle" rel="stylesheet" type="text/css" href="https://madbluecat.github.io/css/dark.726cd11ca6eb7c4f7d48eb420354f814e5c1b94281aaf8fd0511c1319f7f78a4.css" media="(prefers-color-scheme: dark)"  />
+	
+
+	
+	
+
+	
+	
+	
+	
+</head>
+<body>
+        <div class="content"><header>
+	<div class="main">
+		<a href="https://madbluecat.github.io/">BlueBo</a>
+	</div>
+	<nav>
+		
+		<a href="/">Home</a>
+		
+		<a href="/post">All posts</a>
+		
+		<a href="/about">About</a>
+		
+		<a href="/tags">Tags</a>
+		
+		
+	</nav>
+</header>
+
+<main>
+	<article>
+		<div class="title">
+			<h1 class="title">Go 源码学习 引导(二)</h1>
+			<div class="meta">Posted on Jun 24, 2022</div>
+		</div>
+		
+
+		<section class="body">
+			<p>先附上runtime·rt0_go中检查及初始化的源码</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>	<span style="color:#a6e22e">CALL</span>	<span style="color:#a6e22e">runtime</span><span style="color:#960050;background-color:#1e0010">·</span><span style="color:#a6e22e">check</span>(<span style="color:#a6e22e">SB</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">MOVL</span>	<span style="color:#ae81ff">24</span>(<span style="color:#a6e22e">SP</span>), <span style="color:#a6e22e">AX</span>		<span style="color:#75715e">// copy argc
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">MOVL</span>	<span style="color:#a6e22e">AX</span>, <span style="color:#ae81ff">0</span>(<span style="color:#a6e22e">SP</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">MOVQ</span>	<span style="color:#ae81ff">32</span>(<span style="color:#a6e22e">SP</span>), <span style="color:#a6e22e">AX</span>		<span style="color:#75715e">// copy argv
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">MOVQ</span>	<span style="color:#a6e22e">AX</span>, <span style="color:#ae81ff">8</span>(<span style="color:#a6e22e">SP</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">CALL</span>	<span style="color:#a6e22e">runtime</span><span style="color:#960050;background-color:#1e0010">·</span><span style="color:#a6e22e">args</span>(<span style="color:#a6e22e">SB</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">CALL</span>	<span style="color:#a6e22e">runtime</span><span style="color:#960050;background-color:#1e0010">·</span><span style="color:#a6e22e">osinit</span>(<span style="color:#a6e22e">SB</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">CALL</span>	<span style="color:#a6e22e">runtime</span><span style="color:#960050;background-color:#1e0010">·</span><span style="color:#a6e22e">schedinit</span>(<span style="color:#a6e22e">SB</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// create a new goroutine to start program
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">MOVQ</span>	<span style="color:#960050;background-color:#1e0010">$</span><span style="color:#a6e22e">runtime</span><span style="color:#960050;background-color:#1e0010">·</span><span style="color:#a6e22e">mainPC</span>(<span style="color:#a6e22e">SB</span>), <span style="color:#a6e22e">AX</span>		<span style="color:#75715e">// entry
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">PUSHQ</span>	<span style="color:#a6e22e">AX</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">CALL</span>	<span style="color:#a6e22e">runtime</span><span style="color:#960050;background-color:#1e0010">·</span><span style="color:#a6e22e">newproc</span>(<span style="color:#a6e22e">SB</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">POPQ</span>	<span style="color:#a6e22e">AX</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// start this M
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">CALL</span>	<span style="color:#a6e22e">runtime</span><span style="color:#960050;background-color:#1e0010">·</span><span style="color:#a6e22e">mstart</span>(<span style="color:#a6e22e">SB</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">CALL</span>	<span style="color:#a6e22e">runtime</span><span style="color:#960050;background-color:#1e0010">·</span><span style="color:#a6e22e">abort</span>(<span style="color:#a6e22e">SB</span>)	<span style="color:#75715e">// mstart should never return
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">RET</span>
+</span></span></code></pre></div><h2 id="runtimecheck">runtime.check()</h2>
+<p>位于runtime1.go 主要是对内置类型的大小及一些参赛的检查</p>
+<h2 id="runtimeagrs">runtime.agrs()</h2>
+<p>位于runtime1.go 整理命令行参数</p>
+<h2 id="runtimeosinit">runtime.osinit()</h2>
+<p>位于os_linux.go</p>
+<p>1.设置CPU core数量</p>
+<p>2.设置physHugePageSize
+physHugePageSize是从系统文件中获取的，但是我没有从该路径中找到此文件，此时设置physHugePageSize设置的是0</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">sysTHPSizePath</span> = []byte(<span style="color:#e6db74">&#34;/sys/kernel/mm/transparent_hugepage/hpage_pmd_size\x00&#34;</span>)
+</span></span></code></pre></div><h2 id="runtimeschedinit">runtime.schedinit()</h2>
+<p>位于proc.go</p>
+		</section>
+
+		<div class="post-tags">
+			
+			
+			<nav class="nav tags">
+				<ul class="tags">
+					
+					<li><a href="/tags/golang">golang</a></li>
+					
+					<li><a href="/tags/source">source</a></li>
+					
+				</ul>
+			</nav>
+			
+			
+		</div>
+		</article>
+</main>
+<footer>
+  <div style="display:flex"><a class="soc" href="https://github.com" rel="me" title="GitHub"><i data-feather="github"></i></a>
+    <a class="border"></a><a class="soc" href="https://twitter.com" rel="me" title="Twitter"><i data-feather="twitter"></i></a>
+    <a class="border"></a><a class="soc" href="https://gitlab.com" rel="me" title="GitLab"><i data-feather="gitlab"></i></a>
+    <a class="border"></a></div>
+  <div class="footer-info">
+    2024  © bluebo |  <a
+      href="https://github.com/athul/archie">Archie Theme</a> | Built with <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
+
+
+<script>
+  feather.replace()
+</script></div>
+    </body>
+</html>

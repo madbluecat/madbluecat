@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Local on BlueBo</title>
+    <link>https://madbluecat.github.io/tags/local/</link>
+    <description>Recent content in Local on BlueBo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>© bluebo</copyright>
+    <lastBuildDate>Wed, 20 Mar 2024 17:49:40 +0800</lastBuildDate>
+    <atom:link href="https://madbluecat.github.io/tags/local/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>添加本地yum源</title>
+      <link>https://madbluecat.github.io/post/add_local_yum_repo/</link>
+      <pubDate>Wed, 20 Mar 2024 17:49:40 +0800</pubDate>
+      <guid>https://madbluecat.github.io/post/add_local_yum_repo/</guid>
+      <description>本地yum源搭建 由于离线环境无法yum install，但是可以在另一台可以访问外网的相同内核的机器中下载好依赖相关的rpm，在上传到离线环境中的本地yum源， 然后离线环境就可以直接yum install了。&#xA;可访问外网机器执行以下命令可以下载相关依赖包 首先下载 yum-utils 软件包（含 yumdownloader 和 repotrack 等命令）&#xA;yum -y install yum-utils repotrack --download_path=[下载路径] [软件包名称] 如安装tree 命令&#xA;repotrack --download_path=./rpmpkgs tree 然后会将相关依赖包下载到指定目录,打包上传到离线环境中的本地yum源&#xA;离线环境配置本地yum源 配置本地yum仓库信息 # vim /etc/yum.repos.d/my-yum.repo [my-yum] name=my-yum local repository baseurl=file:///home/my-yum gpgcheck=0 enabled=1 可以看到.repo配置文件，也是如此简单：&#xA;my-yum是本地仓库名，可任意起名，但是注意不能与已有的仓库名重复。 name后面是注释信息，随意书写。 baseurl这后面就是填写本地仓库路径了，file://表示使用本地文件协议，后面的/home/my-yum本地rpm包存放路径。 gpgcheck=0这是和验证包的安全信息的，最好设置成0，表示关闭安全验证，否则还需要准备安全验证文件，麻烦一堆一堆的。 enabled=0，表示启用本仓库，1启用，0关闭。&#xA;生成repodata信息 配置好本地yum仓库信息后，需要生成repodata信息，执行以下命令&#xA;createrepo /home/my-yum 测试 直接在离线环境中&#xA;yum install tree 对本地yum仓库更新 当本地yum仓库中rpm包有更新时，需要更新本地yum仓库，执行以下命令&#xA;createrepo --update /home/my-yum </description>
+    </item>
+  </channel>
+</rss>

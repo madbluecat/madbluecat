@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Diaries on BlueBo</title>
+    <link>https://madbluecat.github.io/diary/</link>
+    <description>Recent content in Diaries on BlueBo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>© bluebo</copyright>
+    <lastBuildDate>Tue, 10 May 2022 17:46:28 +0800</lastBuildDate>
+    <atom:link href="https://madbluecat.github.io/diary/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>最近听上瘾的歌</title>
+      <link>https://madbluecat.github.io/diary/like_music/</link>
+      <pubDate>Tue, 10 May 2022 17:46:28 +0800</pubDate>
+      <guid>https://madbluecat.github.io/diary/like_music/</guid>
+      <description>最近喜欢的音乐 The Nights Waiting For Love </description>
+    </item>
+  </channel>
+</rss>

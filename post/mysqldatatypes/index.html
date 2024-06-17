@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html><head lang="en">
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Mysql binlog data types - BlueBo</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="概述
+对mysql binlog中，各类字段存储格式描述" />
+	<meta property="og:image" content=""/>
+	<meta property="og:title" content="Mysql binlog data types" />
+<meta property="og:description" content="概述
+对mysql binlog中，各类字段存储格式描述" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://madbluecat.github.io/post/mysqldatatypes/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2023-04-06T16:15:02+08:00" />
+<meta property="article:modified_time" content="2023-04-06T16:15:02+08:00" />
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Mysql binlog data types"/>
+<meta name="twitter:description" content="概述
+对mysql binlog中，各类字段存储格式描述"/>
+<script src="https://madbluecat.github.io/js/feather.min.js"></script>
+	
+	
+        <link href="https://madbluecat.github.io/css/fonts.2c2227b81b1970a03e760aa2e6121cd01f87c88586803cbb282aa224720a765f.css" rel="stylesheet">
+	
+
+	
+	<link rel="stylesheet" type="text/css" media="screen" href="https://madbluecat.github.io/css/main.ac08a4c9714baa859217f92f051deb58df2938ec352b506df655005dcaf98cc0.css" />
+		<link id="darkModeStyle" rel="stylesheet" type="text/css" href="https://madbluecat.github.io/css/dark.726cd11ca6eb7c4f7d48eb420354f814e5c1b94281aaf8fd0511c1319f7f78a4.css" media="(prefers-color-scheme: dark)"  />
+	
+
+	
+	
+
+	
+	
+	
+	
+</head>
+<body>
+        <div class="content"><header>
+	<div class="main">
+		<a href="https://madbluecat.github.io/">BlueBo</a>
+	</div>
+	<nav>
+		
+		<a href="/">Home</a>
+		
+		<a href="/post">All posts</a>
+		
+		<a href="/about">About</a>
+		
+		<a href="/tags">Tags</a>
+		
+		
+	</nav>
+</header>
+
+<main>
+	<article>
+		<div class="title">
+			<h1 class="title">Mysql binlog data types</h1>
+			<div class="meta">Posted on Apr 6, 2023</div>
+		</div>
+		
+
+		<section class="body">
+			<h1 id="概述">概述</h1>
+<p>对mysql binlog中，各类字段存储格式描述</p>
+<h1 id="数字类型">数字类型</h1>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>大小</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tinyint</td>
+<td>1 byte</td>
+</tr>
+<tr>
+<td>smallint</td>
+<td>2 bytes</td>
+</tr>
+<tr>
+<td>mediumint</td>
+<td>3 bytes</td>
+</tr>
+<tr>
+<td>int,integer</td>
+<td>4 bytes</td>
+</tr>
+<tr>
+<td>bigint</td>
+<td>8 bytes</td>
+</tr>
+<tr>
+<td>float</td>
+<td>4 bytes</td>
+</tr>
+<tr>
+<td>double</td>
+<td>8 bytes</td>
+</tr>
+<tr>
+<td>decimal(m,d),numeric(m,d)</td>
+<td>variable</td>
+</tr>
+<tr>
+<td>bit(m)</td>
+<td>(M+7)/8 bytes</td>
+</tr>
+</tbody>
+</table>
+<h2 id="tinyint-smallint-mediumint-bigint-float-double">tinyint, smallint, mediumint, bigint, float, double</h2>
+<p>mysql 采用小端序列存储</p>
+<h2 id="decimal">decimal</h2>
+<p>对于decimal(m,d)长度为变长，整数位和小数位分别存储，如 <code>123456.3210</code>  decimal(15,4) <code>8000 01e2 400c 8a</code></p>
+<p>mysql将decimal中的整数位和小数位分别存储.</p>
+<p>uint32_max = 4294967295. 对于数字999999999是可以放在一个4bytes的空间的. mysql每9位数分配一个4byte的空间, 剩余的位数按数组分配空间{0, 1, 1, 2, 2, 3, 3, 4, 4, 4};</p>
+<p>如. decimal(15, 4) 整数位=11, 小数位=4.</p>
+<p>那么整数位占空间为 9(4byte) + 2(1byte) = 5bytes.</p>
+<p>小数位占空间为 4(2byte)</p>
+<p>对应的<code>8000 01e2 400c 8a</code> 整数位是<code>8000 01e2 40</code>. 5bytes</p>
+<p>整数位最高位为符号位. 把符号位去除. 整数位是<code>00 0001e240</code> &ndash;&gt; 00 123456</p>
+<p>小数位是<code>0c 8a</code> 2byte &ndash;&gt; 3210</p>
+<h1 id="时间类型">时间类型</h1>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>大小</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>year</td>
+<td>1 byte</td>
+</tr>
+<tr>
+<td>date</td>
+<td>3 bytes</td>
+</tr>
+<tr>
+<td>time</td>
+<td>3 bytes + 精度</td>
+</tr>
+<tr>
+<td>datetime</td>
+<td>8 bytes</td>
+</tr>
+<tr>
+<td>timestamp</td>
+<td>4 bytes + 精度</td>
+</tr>
+</tbody>
+</table>
+<h2 id="date">date</h2>
+<p>小端序列,占3bytes. 5 bit 表示day， 4 bit 表示month，15 bit 表示 year</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Bits</th>
+<th style="text-align:left">Field</th>
+<th style="text-align:left">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right">10</td>
+<td style="text-align:left">year</td>
+<td style="text-align:left">(0-9999)</td>
+</tr>
+<tr>
+<td style="text-align:right">4</td>
+<td style="text-align:left">month</td>
+<td style="text-align:left">(1-12)</td>
+</tr>
+<tr>
+<td style="text-align:right">5</td>
+<td style="text-align:left">day</td>
+<td style="text-align:left">(0-31)</td>
+</tr>
+</tbody>
+</table>
+<p>即yyyyyyyy.yyyyyyym.mmmddddd</p>
+<p>如2019-05-08表示为<code>a8 c60f</code>
+换成大端序列</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>    0f        c6          a8
+</span></span><span style="display:flex;"><span>0000  1111 1100 0110 1010 1000
+</span></span><span style="display:flex;"><span>        year          month   day
+</span></span><span style="display:flex;"><span>|0000 1111 1100 011 | 0101 | 01000   
+</span></span><span style="display:flex;"><span>        2019           5       8
+</span></span></code></pre></div><h2 id="time">time</h2>
+<p>大端序列,占3bytes.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Bits</th>
+<th style="text-align:left">Field</th>
+<th style="text-align:left">Value range</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right">1</td>
+<td style="text-align:left">sign</td>
+<td style="text-align:left">(Used for sign, when on disk)</td>
+</tr>
+<tr>
+<td style="text-align:right">1</td>
+<td style="text-align:left">unused</td>
+<td style="text-align:left">(Reserved for wider hour range, e.g. for intervals)</td>
+</tr>
+<tr>
+<td style="text-align:right">10</td>
+<td style="text-align:left">hour</td>
+<td style="text-align:left">(0-838)</td>
+</tr>
+<tr>
+<td style="text-align:right">6</td>
+<td style="text-align:left">minute</td>
+<td style="text-align:left">(0-59)</td>
+</tr>
+<tr>
+<td style="text-align:right">6</td>
+<td style="text-align:left">second</td>
+<td style="text-align:left">(0-59)</td>
+</tr>
+<tr>
+<td style="text-align:right">24</td>
+<td style="text-align:left">microseconds</td>
+<td style="text-align:left">(0-999999)</td>
+</tr>
+<tr>
+<td style="text-align:right">即 xxhhhhhh.hhhhmmmm.mmssssss</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>如16:35:43表示为'81 08eb'</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>    81       08         eb
+</span></span><span style="display:flex;"><span>1000 0001 0000 1000 1110 1011
+</span></span><span style="display:flex;"><span>        hour     minute     second
+</span></span><span style="display:flex;"><span>10|00 0001 0000| 1000 11 | 10 1011
+</span></span><span style="display:flex;"><span>        16         35         43
+</span></span></code></pre></div><p>额外变长字节表示精度</p>
+<h2 id="datetime">datetime</h2>
+<p>大端序列,占8 bytes.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Bits</th>
+<th style="text-align:left">Field</th>
+<th style="text-align:left">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right">1</td>
+<td style="text-align:left">sign</td>
+<td style="text-align:left">(used when on disk)</td>
+</tr>
+<tr>
+<td style="text-align:right">17</td>
+<td style="text-align:left">year*13+month</td>
+<td style="text-align:left">(year 0-9999, month 0-12)</td>
+</tr>
+<tr>
+<td style="text-align:right">5</td>
+<td style="text-align:left">day</td>
+<td style="text-align:left">(0-31)</td>
+</tr>
+<tr>
+<td style="text-align:right">5</td>
+<td style="text-align:left">hour</td>
+<td style="text-align:left">(0-23)</td>
+</tr>
+<tr>
+<td style="text-align:right">6</td>
+<td style="text-align:left">minute</td>
+<td style="text-align:left">(0-59)</td>
+</tr>
+<tr>
+<td style="text-align:right">6</td>
+<td style="text-align:left">second</td>
+<td style="text-align:left">(0-59)</td>
+</tr>
+<tr>
+<td style="text-align:right">24</td>
+<td style="text-align:left">microseconds</td>
+<td style="text-align:left">(0-999999)</td>
+</tr>
+</tbody>
+</table>
+<p>Total: 64 bits = 8 bytes</p>
+<p>如2019-05-21 14:33:22表示为<code>99A32AE856</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>    99       a3        2a         e8        56
+</span></span><span style="display:flex;"><span>1001 1001 1010 0011 0010 1010 1110  1000 0101 0110
+</span></span><span style="display:flex;"><span>s         y*13+m              day    hour     minute   second
+</span></span><span style="display:flex;"><span>1 | 001 1001 1010 0011 00 | 10 101 |0 1110 | 1000 01 | 01 0110
+</span></span><span style="display:flex;"><span>                              21      14        33        22
+</span></span></code></pre></div><h2 id="timestamp">timestamp</h2>
+<p>大端序列,占 4 bytes. 如果有精度.需要额外字节表示精度
+4 bytes表示自1970-01-01 00:00:00以来的秒级数</p>
+<p>如2019-05-13 11:51:34表示为<code>5CD8E9C6</code></p>
+<p>0x5CD8E9C6 = 1557719494</p>
+		</section>
+
+		<div class="post-tags">
+			
+			
+			<nav class="nav tags">
+				<ul class="tags">
+					
+					<li><a href="/tags/mysql">mysql</a></li>
+					
+					<li><a href="/tags/data-type">data type</a></li>
+					
+				</ul>
+			</nav>
+			
+			
+		</div>
+		</article>
+</main>
+<footer>
+  <div style="display:flex"><a class="soc" href="https://github.com" rel="me" title="GitHub"><i data-feather="github"></i></a>
+    <a class="border"></a><a class="soc" href="https://twitter.com" rel="me" title="Twitter"><i data-feather="twitter"></i></a>
+    <a class="border"></a><a class="soc" href="https://gitlab.com" rel="me" title="GitLab"><i data-feather="gitlab"></i></a>
+    <a class="border"></a></div>
+  <div class="footer-info">
+    2024  © bluebo |  <a
+      href="https://github.com/athul/archie">Archie Theme</a> | Built with <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
+
+
+<script>
+  feather.replace()
+</script></div>
+    </body>
+</html>

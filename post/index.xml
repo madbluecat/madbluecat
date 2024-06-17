@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on BlueBo</title>
+    <link>https://madbluecat.github.io/post/</link>
+    <description>Recent content in Posts on BlueBo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>© bluebo</copyright>
+    <lastBuildDate>Tue, 09 Apr 2024 11:43:54 +0800</lastBuildDate>
+    <atom:link href="https://madbluecat.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Docker_install</title>
+      <link>https://madbluecat.github.io/post/docker_install/</link>
+      <pubDate>Tue, 09 Apr 2024 11:43:54 +0800</pubDate>
+      <guid>https://madbluecat.github.io/post/docker_install/</guid>
+      <description>install docker sudo yum remove docker \ docker-client \ docker-client-latest \ docker-common \ docker-latest \ docker-latest-logrotate \ docker-logrotate \ docker-engine sudo yum install -y yum-utils sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo sudo yum install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin sudo systemctl start docker </description>
+    </item>
+    <item>
+      <title>Tmux</title>
+      <link>https://madbluecat.github.io/post/tmux/</link>
+      <pubDate>Tue, 09 Apr 2024 11:29:54 +0800</pubDate>
+      <guid>https://madbluecat.github.io/post/tmux/</guid>
+      <description>自己的tmux.conf&#xA;# ----------------------------------------------------------------------------- # Tmux 基本配置 - 要求 Tmux &amp;gt;= 2.3 # 如果不想使用插件，只需要将此节的内容写入 ~/.tmux.conf 即可 # ----------------------------------------------------------------------------- # C-b 和 VIM 冲突，修改 Prefix 组合键为 Control-Z，按键距离近 unbind C-b set -g prefix C-x bind r source-file ~/.tmux.conf \; display &amp;#34;Reloaded!&amp;#34; set -g base-index 1 # 窗口编号从 1 开始计数 set -g display-panes-time 10000 # PREFIX-Q 显示编号的驻留时长，单位 ms set -g pane-base-index 1 # 窗格编号从 1 开始计数 set -g renumber-windows on # 关掉某个窗口后，编号重排 setw -g allow-rename off # 禁止活动进程修改窗口名 setw -g automatic-rename off # 禁止自动命名新窗口 setw -g mode-keys vi # 进入复制模式的时候使用 vi 键位（默认是 EMACS） # 开启鼠标模式 # set -g mode-mouse on # # 允许鼠标选择窗格 # set -g mouse-select-pane on bind l select-pane -D bind o select-pane -U bind j select-pane -R bind k select-pane -L bind | split-window -h bind - split-window -v set -g status-fg white set -g status-bg black </description>
+    </item>
+    <item>
+      <title>ibv_destroy_cq</title>
+      <link>https://madbluecat.github.io/post/ibv_destroy_cq/</link>
+      <pubDate>Wed, 27 Mar 2024 10:19:40 +0800</pubDate>
+      <guid>https://madbluecat.github.io/post/ibv_destroy_cq/</guid>
+      <description>ibv_destroy_cq() 5.00 avg. rating (97% score) - 1 vote&#xA;int ibv_destroy_cq(struct ibv_cq *cq); Description ibv_destroy_cq() destroys a Completion Queue.&#xA;The destruction of a CQ will fail if any QP is still associated with it.&#xA;If there is any affiliated asynchronous event on that CQ that was read, using ibv_get_async_event(), but still wasn&amp;rsquo;t acknowledged, using ibv_ack_async_event(), calling to ibv_destroy_cq() will never end until that event will be acknowledged.&#xA;A CQ can be destroyed either if it is empty or contains Work Completions that still weren&amp;rsquo;t polled by ibv_poll_cq().</description>
+    </item>
+    <item>
+      <title>Qp_state_machine</title>
+      <link>https://madbluecat.github.io/post/qp_state_machine/</link>
+      <pubDate>Wed, 27 Mar 2024 10:19:40 +0800</pubDate>
+      <guid>https://madbluecat.github.io/post/qp_state_machine/</guid>
+      <description>copy from RDMAmojo&#xA;// RDMAmojo – blog on RDMA technology and programming by Dotan Barak&#xA;QP state machine Contents&#xA;4.43 avg. rating (89% score) - 14 votes&#xA;Since a QP is one of the important objects in of RDMA, I will handle it in the next few posts.&#xA;QP State transitions In a QP lifetime, the possible states can be:&#xA;Reset Initialize (Init) Ready To Receive (RTR) Ready To Send (RTS) Send Queue Drained (SQD) Send Queue Error (SQE) Error A QP can be transitioned from one state to another state by two possible ways:</description>
+    </item>
+    <item>
+      <title>添加本地yum源</title>
+      <link>https://madbluecat.github.io/post/add_local_yum_repo/</link>
+      <pubDate>Wed, 20 Mar 2024 17:49:40 +0800</pubDate>
+      <guid>https://madbluecat.github.io/post/add_local_yum_repo/</guid>
+      <description>本地yum源搭建 由于离线环境无法yum install，但是可以在另一台可以访问外网的相同内核的机器中下载好依赖相关的rpm，在上传到离线环境中的本地yum源， 然后离线环境就可以直接yum install了。&#xA;可访问外网机器执行以下命令可以下载相关依赖包 首先下载 yum-utils 软件包（含 yumdownloader 和 repotrack 等命令）&#xA;yum -y install yum-utils repotrack --download_path=[下载路径] [软件包名称] 如安装tree 命令&#xA;repotrack --download_path=./rpmpkgs tree 然后会将相关依赖包下载到指定目录,打包上传到离线环境中的本地yum源&#xA;离线环境配置本地yum源 配置本地yum仓库信息 # vim /etc/yum.repos.d/my-yum.repo [my-yum] name=my-yum local repository baseurl=file:///home/my-yum gpgcheck=0 enabled=1 可以看到.repo配置文件，也是如此简单：&#xA;my-yum是本地仓库名，可任意起名，但是注意不能与已有的仓库名重复。 name后面是注释信息，随意书写。 baseurl这后面就是填写本地仓库路径了，file://表示使用本地文件协议，后面的/home/my-yum本地rpm包存放路径。 gpgcheck=0这是和验证包的安全信息的，最好设置成0，表示关闭安全验证，否则还需要准备安全验证文件，麻烦一堆一堆的。 enabled=0，表示启用本仓库，1启用，0关闭。&#xA;生成repodata信息 配置好本地yum仓库信息后，需要生成repodata信息，执行以下命令&#xA;createrepo /home/my-yum 测试 直接在离线环境中&#xA;yum install tree 对本地yum仓库更新 当本地yum仓库中rpm包有更新时，需要更新本地yum仓库，执行以下命令&#xA;createrepo --update /home/my-yum </description>
+    </item>
+    <item>
+      <title>Mysqlbinlog (3)</title>
+      <link>https://madbluecat.github.io/post/mysqlbinlog3/</link>
+      <pubDate>Wed, 17 Jan 2024 20:45:49 +0800</pubDate>
+      <guid>https://madbluecat.github.io/post/mysqlbinlog3/</guid>
+      <description>&lt;h1 id=&#34;write_rows_event&#34;&gt;write_rows_event&lt;/h1&gt;&#xA;&lt;p&gt;每一次执行insert操作，都会产生一个write_rows_event事件。用于记录插入的数据。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>mysql cdc table</title>
+      <link>https://madbluecat.github.io/post/mysqlcdctable/</link>
+      <pubDate>Wed, 17 Jan 2024 17:45:49 +0800</pubDate>
+      <guid>https://madbluecat.github.io/post/mysqlcdctable/</guid>
+      <description>&lt;h1 id=&#34;mysql-cdc-table&#34;&gt;mysql cdc table&lt;/h1&gt;&#xA;&lt;p&gt;基于mysql的存储插件，与mysql的binlog开发了一个mysql cdc table。可以在mysql select binlog中表的变化数据&lt;/p&gt;&#xA;&lt;h2 id=&#34;__op&#34;&gt;__op&lt;/h2&gt;&#xA;&lt;p&gt;0 &amp;ndash; delete data&lt;/p&gt;&#xA;&lt;p&gt;1 &amp;ndash; insert data&lt;/p&gt;&#xA;&lt;p&gt;2 &amp;ndash; update before data&lt;/p&gt;&#xA;&lt;p&gt;3 &amp;ndash; update after date&lt;/p&gt;&#xA;&lt;h2 id=&#34;__gtid&#34;&gt;__gtid&lt;/h2&gt;&#xA;&lt;p&gt;全局事务id&lt;/p&gt;&#xA;&lt;h2 id=&#34;__tm&#34;&gt;__tm&lt;/h2&gt;&#xA;&lt;p&gt;row event 发生的时间&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Mysqlbinlog (2)</title>
+      <link>https://madbluecat.github.io/post/mysqlbinlog2/</link>
+      <pubDate>Wed, 17 Jan 2024 17:43:27 +0800</pubDate>
+      <guid>https://madbluecat.github.io/post/mysqlbinlog2/</guid>
+      <description>&lt;h1 id=&#34;table_map_event&#34;&gt;table_map_event&lt;/h1&gt;&#xA;&lt;p&gt;对于每次insert, update, delete操作，都会产生一个table_map_event，该event用于描述接下来event的数据所对应的表结构。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Mysqlbinlog (1)</title>
+      <link>https://madbluecat.github.io/post/mysqlbinlog1/</link>
+      <pubDate>Mon, 10 Apr 2023 21:43:05 +0800</pubDate>
+      <guid>https://madbluecat.github.io/post/mysqlbinlog1/</guid>
+      <description>&lt;h1 id=&#34;概述&#34;&gt;概述&lt;/h1&gt;&#xA;&lt;p&gt;mysql binlog物理存储格式详解。基于mysql 8.0.22&lt;/p&gt;&#xA;&lt;h2 id=&#34;magicnumber&#34;&gt;MagicNumber&lt;/h2&gt;&#xA;&lt;p&gt;每个binlog的开头是 4bytes magic number &lt;code&gt;0xfe 0x62 0x69 0x6e&lt;/code&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Mysql binlog data types</title>
+      <link>https://madbluecat.github.io/post/mysqldatatypes/</link>
+      <pubDate>Thu, 06 Apr 2023 16:15:02 +0800</pubDate>
+      <guid>https://madbluecat.github.io/post/mysqldatatypes/</guid>
+      <description>&lt;h1 id=&#34;概述&#34;&gt;概述&lt;/h1&gt;&#xA;&lt;p&gt;对mysql binlog中，各类字段存储格式描述&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Go 源码学习 引导(一)</title>
+      <link>https://madbluecat.github.io/post/gosrclearn1/</link>
+      <pubDate>Fri, 24 Jun 2022 00:00:00 +0000</pubDate>
+      <guid>https://madbluecat.github.io/post/gosrclearn1/</guid>
+      <description>&lt;p&gt;参照雨痕的&lt;a href=&#34;https://github.com/qyuhen/book&#34;&gt;GO1.5源码剖析&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Go 源码学习 引导(二)</title>
+      <link>https://madbluecat.github.io/post/gosrclearn2/</link>
+      <pubDate>Fri, 24 Jun 2022 00:00:00 +0000</pubDate>
+      <guid>https://madbluecat.github.io/post/gosrclearn2/</guid>
+      <description>&lt;p&gt;先附上runtime·rt0_go中检查及初始化的源码&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>最近听上瘾的歌</title>
+      <link>https://madbluecat.github.io/post/like_music/</link>
+      <pubDate>Tue, 10 May 2022 17:46:28 +0800</pubDate>
+      <guid>https://madbluecat.github.io/post/like_music/</guid>
+      <description>最近喜欢的音乐 The Nights Waiting For Love </description>
+    </item>
+    <item>
+      <title>Placeholder Text</title>
+      <link>https://madbluecat.github.io/post/placeholder-text/</link>
+      <pubDate>Sat, 09 Mar 2019 00:00:00 +0000</pubDate>
+      <guid>https://madbluecat.github.io/post/placeholder-text/</guid>
+      <description>&lt;p&gt;Lorem est tota propiore conpellat pectoribus de pectora summo.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Math Typesetting</title>
+      <link>https://madbluecat.github.io/post/math-typesetting/</link>
+      <pubDate>Fri, 08 Mar 2019 00:00:00 +0000</pubDate>
+      <guid>https://madbluecat.github.io/post/math-typesetting/</guid>
+      <description>&lt;p&gt;Mathematical notation in a Hugo project can be enabled by using third party JavaScript libraries.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

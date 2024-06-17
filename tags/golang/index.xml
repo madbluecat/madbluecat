@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Golang on BlueBo</title>
+    <link>https://madbluecat.github.io/tags/golang/</link>
+    <description>Recent content in Golang on BlueBo</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>© bluebo</copyright>
+    <lastBuildDate>Fri, 24 Jun 2022 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://madbluecat.github.io/tags/golang/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Go 源码学习 引导(一)</title>
+      <link>https://madbluecat.github.io/post/gosrclearn1/</link>
+      <pubDate>Fri, 24 Jun 2022 00:00:00 +0000</pubDate>
+      <guid>https://madbluecat.github.io/post/gosrclearn1/</guid>
+      <description>&lt;p&gt;参照雨痕的&lt;a href=&#34;https://github.com/qyuhen/book&#34;&gt;GO1.5源码剖析&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Go 源码学习 引导(二)</title>
+      <link>https://madbluecat.github.io/post/gosrclearn2/</link>
+      <pubDate>Fri, 24 Jun 2022 00:00:00 +0000</pubDate>
+      <guid>https://madbluecat.github.io/post/gosrclearn2/</guid>
+      <description>&lt;p&gt;先附上runtime·rt0_go中检查及初始化的源码&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

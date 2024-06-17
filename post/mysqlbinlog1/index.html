@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html><head lang="en">
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Mysqlbinlog (1) - BlueBo</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="概述
+mysql binlog物理存储格式详解。基于mysql 8.0.22
+MagicNumber
+每个binlog的开头是 4bytes magic number 0xfe 0x62 0x69 0x6e" />
+	<meta property="og:image" content=""/>
+	<meta property="og:title" content="Mysqlbinlog (1)" />
+<meta property="og:description" content="概述
+mysql binlog物理存储格式详解。基于mysql 8.0.22
+MagicNumber
+每个binlog的开头是 4bytes magic number 0xfe 0x62 0x69 0x6e" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://madbluecat.github.io/post/mysqlbinlog1/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2023-04-10T21:43:05+08:00" />
+<meta property="article:modified_time" content="2023-04-10T21:43:05+08:00" />
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Mysqlbinlog (1)"/>
+<meta name="twitter:description" content="概述
+mysql binlog物理存储格式详解。基于mysql 8.0.22
+MagicNumber
+每个binlog的开头是 4bytes magic number 0xfe 0x62 0x69 0x6e"/>
+<script src="https://madbluecat.github.io/js/feather.min.js"></script>
+	
+	
+        <link href="https://madbluecat.github.io/css/fonts.2c2227b81b1970a03e760aa2e6121cd01f87c88586803cbb282aa224720a765f.css" rel="stylesheet">
+	
+
+	
+	<link rel="stylesheet" type="text/css" media="screen" href="https://madbluecat.github.io/css/main.ac08a4c9714baa859217f92f051deb58df2938ec352b506df655005dcaf98cc0.css" />
+		<link id="darkModeStyle" rel="stylesheet" type="text/css" href="https://madbluecat.github.io/css/dark.726cd11ca6eb7c4f7d48eb420354f814e5c1b94281aaf8fd0511c1319f7f78a4.css" media="(prefers-color-scheme: dark)"  />
+	
+
+	
+	
+
+	
+	
+	
+	
+</head>
+<body>
+        <div class="content"><header>
+	<div class="main">
+		<a href="https://madbluecat.github.io/">BlueBo</a>
+	</div>
+	<nav>
+		
+		<a href="/">Home</a>
+		
+		<a href="/post">All posts</a>
+		
+		<a href="/about">About</a>
+		
+		<a href="/tags">Tags</a>
+		
+		
+	</nav>
+</header>
+
+<main>
+	<article>
+		<div class="title">
+			<h1 class="title">Mysqlbinlog (1)</h1>
+			<div class="meta">Posted on Apr 10, 2023</div>
+		</div>
+		
+
+		<section class="body">
+			<h1 id="概述">概述</h1>
+<p>mysql binlog物理存储格式详解。基于mysql 8.0.22</p>
+<h2 id="magicnumber">MagicNumber</h2>
+<p>每个binlog的开头是 4bytes magic number <code>0xfe 0x62 0x69 0x6e</code></p>
+<h2 id="eventhead">EventHead</h2>
+<p>mysql binlog 是由多个event组成的，而每个event都有一个通用的head，结构如下</p>
+<table>
+<thead>
+<tr>
+<th>filed</th>
+<th>bytes</th>
+<th>desc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>timestamp</td>
+<td>4</td>
+<td>自1970-01-01 00:00:00以来的秒级数</td>
+</tr>
+<tr>
+<td>eventType</td>
+<td>1</td>
+<td>当前event的类型</td>
+</tr>
+<tr>
+<td>serverID</td>
+<td>4</td>
+<td>mysql server id</td>
+</tr>
+<tr>
+<td>eventLength</td>
+<td>4</td>
+<td>当前even的字节长度</td>
+</tr>
+<tr>
+<td>nextEventPos</td>
+<td>4</td>
+<td>下一个event的位置</td>
+</tr>
+<tr>
+<td>flag</td>
+<td>2</td>
+<td>flags</td>
+</tr>
+</tbody>
+</table>
+<h3 id="eventtype">eventType</h3>
+<p>这里是所有的<a href="https://dev.mysql.com/doc/dev/mysql-server/latest/binlog__event_8h_source.html">eventType</a></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#66d9ef">enum</span> <span style="color:#a6e22e">Log_event_type</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">    Every time you add a type, you have to
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">    - Assign it a number explicitly. Otherwise it will cause trouble
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">      if a event type before is deprecated and removed directly from
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">      the enum.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">    - Fix Format_description_event::Format_description_event().
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">  */</span>
+</span></span><span style="display:flex;"><span>  UNKNOWN_EVENT <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">    Deprecated since mysql 8.0.2. It is just a placeholder,
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">    should not be used anywhere else.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">  */</span>
+</span></span><span style="display:flex;"><span>  START_EVENT_V3 <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>  QUERY_EVENT <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>,
+</span></span><span style="display:flex;"><span>  STOP_EVENT <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>,
+</span></span><span style="display:flex;"><span>  ROTATE_EVENT <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>,
+</span></span><span style="display:flex;"><span>  INTVAR_EVENT <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span>,
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span>  SLAVE_EVENT <span style="color:#f92672">=</span> <span style="color:#ae81ff">7</span>,
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span>  APPEND_BLOCK_EVENT <span style="color:#f92672">=</span> <span style="color:#ae81ff">9</span>,
+</span></span><span style="display:flex;"><span>  DELETE_FILE_EVENT <span style="color:#f92672">=</span> <span style="color:#ae81ff">11</span>,
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span>  RAND_EVENT <span style="color:#f92672">=</span> <span style="color:#ae81ff">13</span>,
+</span></span><span style="display:flex;"><span>  USER_VAR_EVENT <span style="color:#f92672">=</span> <span style="color:#ae81ff">14</span>,
+</span></span><span style="display:flex;"><span>  FORMAT_DESCRIPTION_EVENT <span style="color:#f92672">=</span> <span style="color:#ae81ff">15</span>,
+</span></span><span style="display:flex;"><span>  XID_EVENT <span style="color:#f92672">=</span> <span style="color:#ae81ff">16</span>,
+</span></span><span style="display:flex;"><span>  BEGIN_LOAD_QUERY_EVENT <span style="color:#f92672">=</span> <span style="color:#ae81ff">17</span>,
+</span></span><span style="display:flex;"><span>  EXECUTE_LOAD_QUERY_EVENT <span style="color:#f92672">=</span> <span style="color:#ae81ff">18</span>,
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span>  TABLE_MAP_EVENT <span style="color:#f92672">=</span> <span style="color:#ae81ff">19</span>,
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">    The V1 event numbers are used from 5.1.16 until mysql-5.6.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">  */</span>
+</span></span><span style="display:flex;"><span>  WRITE_ROWS_EVENT_V1 <span style="color:#f92672">=</span> <span style="color:#ae81ff">23</span>,
+</span></span><span style="display:flex;"><span>  UPDATE_ROWS_EVENT_V1 <span style="color:#f92672">=</span> <span style="color:#ae81ff">24</span>,
+</span></span><span style="display:flex;"><span>  DELETE_ROWS_EVENT_V1 <span style="color:#f92672">=</span> <span style="color:#ae81ff">25</span>,
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">    Something out of the ordinary happened on the master
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">   */</span>
+</span></span><span style="display:flex;"><span>  INCIDENT_EVENT <span style="color:#f92672">=</span> <span style="color:#ae81ff">26</span>,
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">    Heartbeat event to be send by master at its idle time
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">    to ensure master&#39;s online status to slave
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">  */</span>
+</span></span><span style="display:flex;"><span>  HEARTBEAT_LOG_EVENT <span style="color:#f92672">=</span> <span style="color:#ae81ff">27</span>,
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">    In some situations, it is necessary to send over ignorable
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">    data to the slave: data that a slave can handle in case there
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">    is code for handling it, but which can be ignored if it is not
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">    recognized.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">  */</span>
+</span></span><span style="display:flex;"><span>  IGNORABLE_LOG_EVENT <span style="color:#f92672">=</span> <span style="color:#ae81ff">28</span>,
+</span></span><span style="display:flex;"><span>  ROWS_QUERY_LOG_EVENT <span style="color:#f92672">=</span> <span style="color:#ae81ff">29</span>,
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">/** Version 2 of the Row events */</span>
+</span></span><span style="display:flex;"><span>  WRITE_ROWS_EVENT <span style="color:#f92672">=</span> <span style="color:#ae81ff">30</span>,
+</span></span><span style="display:flex;"><span>  UPDATE_ROWS_EVENT <span style="color:#f92672">=</span> <span style="color:#ae81ff">31</span>,
+</span></span><span style="display:flex;"><span>  DELETE_ROWS_EVENT <span style="color:#f92672">=</span> <span style="color:#ae81ff">32</span>,
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span>  GTID_LOG_EVENT <span style="color:#f92672">=</span> <span style="color:#ae81ff">33</span>,
+</span></span><span style="display:flex;"><span>  ANONYMOUS_GTID_LOG_EVENT <span style="color:#f92672">=</span> <span style="color:#ae81ff">34</span>,
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span>  PREVIOUS_GTIDS_LOG_EVENT <span style="color:#f92672">=</span> <span style="color:#ae81ff">35</span>,
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span>  TRANSACTION_CONTEXT_EVENT <span style="color:#f92672">=</span> <span style="color:#ae81ff">36</span>,
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span>  VIEW_CHANGE_EVENT <span style="color:#f92672">=</span> <span style="color:#ae81ff">37</span>,
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">/* Prepared XA transaction terminal event similar to Xid */</span>
+</span></span><span style="display:flex;"><span>  XA_PREPARE_LOG_EVENT <span style="color:#f92672">=</span> <span style="color:#ae81ff">38</span>,
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">    Extension of UPDATE_ROWS_EVENT, allowing partial values according
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">    to binlog_row_value_options.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">  */</span>
+</span></span><span style="display:flex;"><span>  PARTIAL_UPDATE_ROWS_EVENT <span style="color:#f92672">=</span> <span style="color:#ae81ff">39</span>,
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span>  TRANSACTION_PAYLOAD_EVENT <span style="color:#f92672">=</span> <span style="color:#ae81ff">40</span>,
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span>  HEARTBEAT_LOG_EVENT_V2 <span style="color:#f92672">=</span> <span style="color:#ae81ff">41</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">    Add new events here - right above this comment!
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">    Existing events (except ENUM_END_EVENT) should never change their numbers
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">  */</span>
+</span></span><span style="display:flex;"><span>  ENUM_END_EVENT <span style="color:#75715e">/* end marker */</span>
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div>
+		</section>
+
+		<div class="post-tags">
+			
+			
+			<nav class="nav tags">
+				<ul class="tags">
+					
+					<li><a href="/tags/mysql">mysql</a></li>
+					
+					<li><a href="/tags/binlog">binlog</a></li>
+					
+					<li><a href="/tags/event">event</a></li>
+					
+				</ul>
+			</nav>
+			
+			
+		</div>
+		</article>
+</main>
+<footer>
+  <div style="display:flex"><a class="soc" href="https://github.com" rel="me" title="GitHub"><i data-feather="github"></i></a>
+    <a class="border"></a><a class="soc" href="https://twitter.com" rel="me" title="Twitter"><i data-feather="twitter"></i></a>
+    <a class="border"></a><a class="soc" href="https://gitlab.com" rel="me" title="GitLab"><i data-feather="gitlab"></i></a>
+    <a class="border"></a></div>
+  <div class="footer-info">
+    2024  © bluebo |  <a
+      href="https://github.com/athul/archie">Archie Theme</a> | Built with <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
+
+
+<script>
+  feather.replace()
+</script></div>
+    </body>
+</html>
